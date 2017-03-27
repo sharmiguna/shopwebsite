@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/css/amazon.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+
+	<title>review page</title>
+</head>
+<body ng-app="reviewApp">
+<header>
+<a href="/home">Home</a>	
+ Product reviews page: 
+</header>	
+	<div class="review" ng-controller="reviewCtrl">			
+		<div class="container">
+			<div class ="row">
+				<div class="col-md-9">
+					<div class="row">
+					<br>
+						<h4>Customer reviews for {{details.productname}}</h4> 
+							
+						<fieldset class="rating" ng-disabled="true">  
+						<!-- <span style="color: blue;font-size: 14px;padding-left: 20px; float: left; padding-right: 20px">avg rating : {{rating | number : 2}}</span> -->
+					    <input type="radio" id="star5" ng-model="rating" name="rating" value="5.0" /><label class = "full" for="star5" ></label>
+					    <input type="radio" id="star4half" ng-model="rating" name="rating" value="4.5" /><label class="half" for="star4half" ></label>
+					    <input type="radio" id="star4" ng-model="rating" name="rating" value="4.0" /><label class = "full" for="star4" ></label>
+					    <input type="radio" id="star3half" ng-model="rating" name="rating" value="3.5" /><label class="half" for="star3half" ></label>
+					    <input type="radio" id="star3" ng-model="rating" name="rating" value="3.0" /><label class = "full" for="star3" ></label>
+					    <input type="radio" id="star2half" ng-model="rating" name="rating" value="2.5" /><label class="half" for="star2half" ></label>
+					    <input type="radio" id="star2" ng-model="rating" name="rating" value="2.0" /><label class = "full" for="star2" ></label>
+					    <input type="radio" id="star1half" ng-model="rating" name="rating" value="1.5" /><label class="half" for="star1half" ></label>
+					    <input type="radio" id="star1" ng-model="rating" name="rating" value="1.0" /><label class = "full" for="star1" ></label>
+					    <input type="radio" id="starhalf" ng-model="rating" name="rating" value=".5" /><label class="half" for="starhalf" ></label>
+ 						</fieldset> 
+<!--  						<br> rating: {{details.rating}} num of reviews( {{details.reviewnum}})					
+ -->
+					</div><br>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="skillbar clearfix " data-percent="{{ reviewsbar[5] }}%">
+								<div class="skillbar-bar" ></div>
+								<div class="skill-bar-percent"> 5 star - {{reviewsbar[5] | number : 2}}%</div>
+							</div> 
+							<div class="skillbar clearfix " data-percent="{{ reviewsbar[4] }}%">
+								<div class="skillbar-bar"></div>
+								<div class="skill-bar-percent"> 4 star - {{reviewsbar[4]  | number : 2}}%</div>
+							</div> 
+							<div class="skillbar clearfix " data-percent="{{ reviewsbar[3] }}%">						
+								<div class="skillbar-bar"></div>
+								<div class="skill-bar-percent">3 star - {{reviewsbar[3] | number : 2}}%</div>
+							</div>
+							<div class="skillbar clearfix " data-percent="{{ reviewsbar[2] }}%">
+								<div class="skillbar-bar"></div>
+								<div class="skill-bar-percent"> 2 star - {{reviewsbar[2] | number : 2}}%</div>
+							</div>
+							<div class="skillbar clearfix " data-percent="{{ reviewsbar[1] }}%">
+								<div class="skillbar-bar"></div>
+								<div class="skill-bar-percent">1 star - {{reviewsbar[1] | number : 2}}%</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="row" style="padding-left: 20%">
+							<h4>Share your thoughts with other customers</h4>
+							<button ng-click="showwrite()">Write a customer review</button>
+							<br><br>
+							</div>
+							<div class="row" ng-show="write">				
+								<form id="ratingsForm"><br>
+								<input type="text" ng-model="user" placeholder="Name"><br><br>
+								<input type="text" ng-model="comment" placeholder="Comment">
+								<br><br>
+									<div class="stars" style="float: left">
+										<input type="radio" name="star" ng-model="ratestar" class="star-1" id="star-1" value="1"/>
+										<label class="star-1" for="star-1">1</label>
+										<input type="radio" name="star" ng-model="ratestar" class="star-2" id="star-2" value="2"/>
+										<label class="star-2" for="star-2">2</label>
+										<input type="radio" name="star" ng-model="ratestar" class="star-3" id="star-3" value="3"/>
+										<label class="star-3" for="star-3">3</label>
+										<input type="radio" name="star" ng-model="ratestar" class="star-4" id="star-4" value="4"/>
+										<label class="star-4" for="star-4">4</label>
+										<input type="radio" name="star" ng-model="ratestar" class="star-5" id="star-5" value="5"/>
+										<label class="star-5" for="star-5">5</label>
+										<span></span>
+									</div>
+								<input type="button" value="send review" ng-click="submit(details.ID)">
+								<br><br>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+				<br><br><br>
+					<img src="/{{details.imageurl}}" width="100%" align="right">
+				</div>
+			</div>
+
+
+
+
+			<div class="row">
+				<h3>Reviews</h3>
+				<table>
+					<tr>
+					<th>Customer</th>
+					<th>Comments</th>
+					<th>rating</th>
+					</tr>
+					<tr ng-repeat="review in reviews">
+					<td>{{review.custname}}</td>
+					<td>{{review.custreview}} </td>
+					<td>
+						<fieldset class="rating" ng-disabled=true style="float: right;">  
+						    <input type="radio" id="star5" ng-model="review.custrating" value="5" /><label class = "full" for="star5" ></label>
+						    <input type="radio" id="star4" ng-model="review.custrating" value="4" /><label class = "full" for="star4" ></label>
+						    <input type="radio" id="star3" ng-model="review.custrating" value="3" /><label class = "full" for="star3" ></label>
+						    <input type="radio" id="star2" ng-model="review.custrating" value="2" /><label class = "full" for="star2" ></label>
+						    <input type="radio" id="star1" ng-model="review.custrating" value="1" /><label class = "full" for="star1" ></label>
+						</fieldset>
+					</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+
+<script type="text/javascript">
+	var app = angular.module('reviewApp',[]);
+
+	app.factory('reviewFactory', function($http) {
+		return {
+			getdetails : function(url1) {
+				return $http.get(url1);
+			},
+			getreviews : function(url2) {
+				return $http.get(url2);
+			},
+			getbardata : function(url3) {
+				return $http.get(url3);
+			}
+
+		}
+	});
+
+	app.controller('reviewCtrl', function($scope,reviewFactory, $http) {
+		$scope.write=false;
+		$scope.prodid = <%= ID %>;
+		console.log("id for the product is", $scope.prodid);
+		var url1 = "/home/details?inp=" + $scope.prodid;
+		var url2 = "/home/reviews?inp=" + $scope.prodid;
+		var url3 = "/home/reviewbar?inp=" + $scope.prodid;
+		var dict = {
+		 		1: 0,
+		 		2: 0,
+		 		3: 0,
+		 		4: 0,
+		 		5: 0	
+		 	};
+		var total = 0;
+
+		reviewFactory.getdetails(url1).success(function(data){
+		 	console.log("the product details are", data);
+		 	$scope.details = data[0];
+		 	var rating = $scope.details.rating;
+		 	$scope.rating = (Math.round(rating * 2) / 2).toFixed(1)
+
+		 	console.log("star rating is", $scope.rating);
+		});
+
+		reviewFactory.getreviews(url2).success(function(data){
+		 	$scope.reviews = data;
+		 	console.log("the item reviews are", $scope.reviews);
+
+		});
+
+		reviewFactory.getbardata(url3).success(function(data){
+		 	for(var i = 0 ; i < data.length; i++) {
+		 		total += data[i].count;
+		 	}
+		 	console.log("total is", total);
+		 	for(var i = 0; i < data.length; i++ ) {
+		 		var rating = data[i].custrating;
+		 		dict[rating] = (data[i].count * 100) / total;
+		 	}
+		 	console.log("dictionary for bar chart", dict);
+		 	$scope.reviewsbar = dict;
+		 	console.log("the item in the reviewsbar are", $scope.reviewsbar);
+		});
+
+
+		
+
+		$scope.submit = function(id) {
+		 	var id = parseInt(id);
+		 	console.log("id is",id);
+		 	console.log($scope.ratestar,"is the star review selected");
+		 	var request = $http.post('/home/reviews' , {
+		 		'ID' : id,
+		 		'user': $scope.user,
+		 		'comment': $scope.comment,
+		 		'rating': $scope.ratestar
+		 	}).then(function(response) {
+			    if(response) {
+			        alert("hello "+$scope.user+", your comment :"+$scope.comment+ " and rating : "+$scope.ratestar+"is sent");
+			    	$scope.write = false;
+			    	window.location.href="reviewsredirect?inp="+$scope.prodid;
+			    }
+			    else {
+			      	alert("error : not sent. Try again!");
+			    }
+		    });
+		};
+
+		$scope.showwrite = function() {
+		 	console.log("going to pop customer review ");
+		 	if($scope.write==false)
+		 		$scope.write = true;	
+		 	else
+		 		$scope.write = false;	
+		};
+
+	});
+
+	jQuery(document).ready(function(){
+	jQuery('.skillbar').each(function(){
+		jQuery(this).find('.skillbar-bar').animate({
+			width:jQuery(this).attr('data-percent')
+		},1000);
+	});
+	});
+
+</script>
+</html>

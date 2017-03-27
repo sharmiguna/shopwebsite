@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/amazon.css">
+<head>
+	<title>shopping</title>
+</head>
+<body ng-app="myApp">
+	<header>
+		Let's SHOP..
+	</header>
+	<div class="content" ng-controller="myCtrl">
+		<div ng-repeat="item in items" class="divstyle">
+			<a href=#><img src="{{item.imageurl}}" ng-click="showprod(item.ID)" width="30%"></a>
+			<br>
+				<ul>
+				<li>{{item.productname}}</li>
+				<li>cost : {{item.cost}}$</li>
+				<li ng-show="{{item.prime}}" style="color: #0844a5">
+					<span class="glyphicon glyphicon-ok"><i>prime</i></span>
+        		</li>
+        		<li> rating {{ formatnum(item.rating) }}</li>
+				<fieldset class="rating" ng-init="item.formattedRate=formatnum(item.rating)" >
+
+					    <input type="radio" id="star5{{item.ID}}" ng-model="item.formattedRate"  value="5.0" /><label class = "full" for="star5{{item.ID}}" ></label>
+					    <input type="radio" id="star4half{{item.ID}}" ng-model="item.formattedRate" value="4.5" /><label class="half" for="star4half{{item.ID}}" ></label>
+					    <input type="radio" id="star4{{item.ID}}" ng-model="item.formattedRate"  value="4.0" /><label class = "full" for="star4{{item.ID}}" ></label>
+					    <input type="radio" id="star3half{{item.ID}}" ng-model="item.formattedRate" value="3.5" /><label class="half" for="star3half{{item.ID}}" ></label>
+					    <input type="radio" id="star3{{item.ID}}" ng-model="item.formattedRate"  value="3.0" /><label class = "full" for="star3{{item.ID}}" ></label>
+					    <input type="radio" id="star2half{{item.ID}}" ng-model="item.formattedRate" value="2.5" /><label class="half" for="star2half{{item.ID}}" ></label>
+					    <input type="radio" id="star2{{item.ID}}" ng-model="item.formattedRate" value="2.0" /><label class = "full" for="star2{{item.ID}}" ></label>
+					    <input type="radio" id="star1half{{item.ID}}" ng-model="item.formattedRate"  value="1.5" /><label class="half" for="star1half{{item.ID}}" ></label>
+					    <input type="radio" id="star1{{item.ID}}" ng-model="item.formattedRate"  value="1.0" /><label class = "full" for="star1{{item.ID}}" ></label>
+				</fieldset>				
+				</ul>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript">
+	var app = angular.module('myApp',[]);
+	app.factory('shopFactory', ['$http', function($http) {
+		return {
+			getitems : function() {
+				return $http.get("/home/list");
+			}
+		}
+	}]);
+
+	app.controller('myCtrl', function($scope, shopFactory, $http) {
+
+		shopFactory.getitems().success(function(data) {
+			console.log("the list of items are", data);
+			$scope.items = data;
+		});
+
+		$scope.showprod = function(id) {
+			var id = parseInt(id);
+			console.log("details to be viewed is for", id);
+			window.location.href="home/list?inp="+id;
+		};
+
+		$scope.formatnum = function(num) {
+			return (Math.round(num * 2) / 2).toFixed(1);
+		};
+	});
+
+</script>
+</html>

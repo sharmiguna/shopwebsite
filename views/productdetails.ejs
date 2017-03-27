@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/amazon.css">
+	<title>productdetails</title>
+</head>
+<body ng-app="detailApp">
+<div ng-controller = "detailCtrl" class="detail">
+	<header>
+	<a href="/home">Home</a>	
+	 Product details page: 
+	</header>
+			
+		<h3>Product is: {{detail.productname}} with id {{prodid}}</h3>
+		<h3> {{detail.description}} description</h3>
+		<fieldset class="rating" ng-disabled=true >  
+		    <input type="radio" id="star5" ng-model="rating"  value="5.0" /><label class = "full" for="star5" ></label>
+		    <input type="radio" id="star4half" ng-model="rating" value="4.5" /><label class="half" for="star4half" ></label>
+		    <input type="radio" id="star4" ng-model="rating"  value="4.0" /><label class = "full" for="star4" ></label>
+		    <input type="radio" id="star3half" ng-model="rating" value="3.5" /><label class="half" for="star3half" ></label>
+		    <input type="radio" id="star3" ng-model="rating"  value="3.0" /><label class = "full" for="star3" ></label>
+		    <input type="radio" id="star2half" ng-model="rating" value="2.5" /><label class="half" for="star2half" ></label>
+		    <input type="radio" id="star2" ng-model="rating" value="2.0" /><label class = "full" for="star2" ></label>
+		    <input type="radio" id="star1half" ng-model="rating"  value="1.5" /><label class="half" for="star1half" ></label>
+		    <input type="radio" id="star1" ng-model="rating"  value="1.0" /><label class = "full" for="star1" ></label>
+		</fieldset><br>
+		 <p>customer reviews : {{detail.reviewnum}}</p>
+		<img src="/{{detail.imageurl}}">
+		<br><br>
+	<input type="button" ng-click="review(details.ID)" value="customer reviews" />
+</div>
+</body>
+
+<script type="text/javascript">
+	var app = angular.module('detailApp',[]);
+
+	app.factory('detailFactory', function($http) {
+		return {
+			getdetails : function(url) {
+				return $http.get(url);
+			}
+		}
+	});
+
+	app.controller('detailCtrl', function($scope,detailFactory) {
+		$scope.prodid = <%= ID %>;
+		var url = "details?inp=" + $scope.prodid+"";
+		console.log("url is",url)
+		 detailFactory.getdetails(url).success(function(data){
+		 	$scope.detail = data[0];
+		 	console.log("the item scope.details are" , $scope.detail);
+		 	var rating = $scope.detail.rating;
+		 	$scope.rating = (Math.round(rating * 2) / 2).toFixed(1)
+		 	console.log("rating is ", $scope.rating);
+		 })
+
+		$scope.review = function(id) {
+		 	var id = parseInt(id);
+		 	console.log("going to open the customer review page for ",id);
+		 	window.location.href="reviewsredirect?inp="+$scope.prodid;
+
+		};
+
+		$scope.formatnum = function(num) {
+			return (Math.round(num * 2) / 2).toFixed(1);
+		};
+
+	});
+
+</script>
+</html>
